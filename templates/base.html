@@ -1,0 +1,50 @@
+{% load static %}
+{% load tailwind_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% tailwind_css %}
+
+    <!--Favicon-->
+
+    <!-- AlpineJS -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+
+    <!--Boxicons-->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--JQuery-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    
+    {% block extra_head %}{% endblock extra_head %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body class="bg-gray-100 dark:bg-dark-main flex justify-center">
+
+    {% block navbar %}{% endblock navbar %}
+
+    <div class="flex justify-center h-screen">
+        <!--left sidebar-->
+        <div class="w-1/5 pt-16 h-full hidden xl:flex flex-col fixed top-0 left-0">
+        {% block left_sidebar %}{% endblock left_sidebar %}
+        </div>
+
+        <!--main content-->
+        <div class="w-full lg:w-2/3 xl:w-2/5 pt-32 lg:pt-16 px-2">
+        {% block content %}{% endblock content %}
+        </div>
+
+        <div class="w-1/5 pt-16 h-full hidden xl:block px-4 fixed top-0 right-0">
+        {% block right_sidebar %}{% endblock right_sidebar %}
+        </div>
+    </div>
+    <!--FOOTER-->
+
+    {% block javascript %}{% endblock javascript %}
+</body>
+</html>

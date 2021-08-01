@@ -1,0 +1,157 @@
+{% load static %}
+<nav class="bg-white dark:bg-dark-second h-max md:h-14 w-full shadow flex flex-col md:flex-row items-center justify-center md:justify-between fixed top-0 z-50 border-b dark:border-dark-third">
+
+    <!-- LEFT NAV -->
+    <div class="flex items-center justify-between w-full md:w-max px-4 py-2">
+        <a href="#" class="mr-2 hidden md:inline-block">
+            <img src="{% static 'img/logo.png' %}" alt="Facebook logo" class="w-24 sm:w-20 lg:w-10 h-auto">
+        </a>
+        <a href="#" class="inline-block md:hidden">
+            <img src="{% static 'img/logo.png' %}" alt="" class="w-10 h-10">
+        </a>
+
+        <div class="flex items-center justify-between space-x-1">
+
+            <a href="#" class="inline-flex md:hidden items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
+                <i class='bx bx-coin text-yellow-400'></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span class="mx-2 font-semibold dark:text-dark-txt">0.00</span>
+            </a>
+
+            <div class="relative bg-gray-100 dark:bg-dark-third px-2 py-2 w-10 h-10 sm:w-11 sm:h-11 lg:h-10 lg:w-10 xl:w-max xl:pl-3 xl:pr-8 rounded-full flex items-center justify-center cursor-pointer">
+                <i class='bx bx-search-alt-2 text-xl xl:mr-2 dark:text-dark-txt'></i>
+                <input type="text" placeholder="Search Facebook" class="outline-none border-none bg-transparent hidden xl:inline-block">
+            </div>
+
+            <div class="text-xl grid place-items-center md:hidden bg-gray-200 dark:bg-dark-third rounded-full w-10 h-10 cursor-pointer hover:bg-gray-300 dark:text-dark-txt" id="dark-mode-toggle-mb">
+                <i class='bx bxs-bell'></i>
+            </div>
+        </div>
+    </div>
+    <!-- END LEFT NAV -->
+
+    <!-- MAIN NAV -->
+    <ul x-data="{ open: false }" class="flex w-full lg:w-max items-center justify-center">
+        <li class="w-1/5 md:w-max text-center">
+            <a href="#" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block text-blue-500 border-b-4 border-blue-500">
+                <i class='bx bxs-home'></i>
+            </a>
+        </li>
+        <li class="w-1/5 md:w-max text-center">
+            <a href="#" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
+                <i class='bx bx-movie-play'></i>
+                {% comment %} <span class="text-xs absolute top-0 right-1/4 bg-red-500 text-white font-semibold rounded-full px-1 text-center">9+</span> {% endcomment %}
+            </a>
+        </li>
+        <li class="w-1/5 md:w-max text-center">
+            <a href="#" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
+                <i class='bx bx-store'></i>
+            </a>
+        </li>
+        <li class="w-1/5 md:w-max text-center">
+            <a href="#" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
+                <i class='bx bx-group'></i>
+            </a>
+        </li>
+        <li class="w-1/5 md:w-max text-center hidden md:inline-block">
+            <button @click="open=true" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
+                <i class='bx bx-menu'></i>
+            </button>
+        </li>
+        <li class="w-1/5 md:w-max text-center inline-block md:hidden">
+            <button @click="open=true" class="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third dark:text-dark-txt relative">
+                <i class='bx bx-menu'></i>
+            </button>
+        </li>
+    
+
+        <!--LEFT Mobile Sidebar-->
+        <div @keydown.window.escape="open = false" x-show="open" aria-labelledby="slide-over-title" x-ref="dialog" aria-modal="true" 
+                class="fixed z-10 inset-0 overflow-auto xl:hidden ">
+            <div class="absolute inset-0 overflow-hidden">
+                
+                <div x-description="Background overlay, show/hide based on slide-over state." class="absolute inset-0" @click="open = false" aria-hidden="true"></div>
+
+                <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex ">
+                
+                    <div x-show="open" @click.away="open = false"  class="w-screen max-w-md" x-description="Slide-over panel, show/hide based on slide-over state.">
+                        <div class="h-full flex flex-col py-6 bg-white dark:bg-dark-second shadow-xl overflow-y-scroll scrollbar-hide">
+                            <div class="px-4 sm:px-6">
+                                <div class="flex items-start justify-between">
+                                    <h2 class="text-lg font-medium dark:text-gray-500 text-gray-900" id="slide-over-title">
+                                    Menu
+                                    </h2>
+                                    <div class="ml-3 h-7 flex items-center">
+                                    <button class="bg-white dark:bg-dark-third rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" @click="open = false">
+                                        <span class="sr-only">Close panel</span>
+                                        <svg class="h-6 w-6" x-description="Heroicon name: outline/x" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 relative flex-1 px-4 sm:px-6">
+                                <!-- Replace with your content -->
+                                
+                                <!--Menu Items-->
+                                {% include 'components/sidebars/left/items.html' %}
+                               
+
+                                {% include 'components/footer.html' %}
+                                
+                                <!-- /End replace -->
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+    </ul>
+    <!-- END MAIN NAV -->
+
+    <!-- RIGHT NAV -->
+    <ul class="hidden md:flex mx-4 items-center justify-center">
+        <li class="h-full xl:flex">
+            <a href="#" class="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
+                <i class='bx bx-coin text-yellow-400'></i>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span class="mx-2 font-semibold dark:text-dark-txt">0.00</span>
+            </a>
+        </li>
+
+        <li>
+            <div x-data="{open:false}">
+            <div @click="open=true" class="text-xl grid place-items-center dark:bg-dark-second bg-gray-200 dark:bg-dark-third dark:text-dark-txt rounded-full mx-1 p-3 cursor-pointer hover:bg-gray-300 relative">
+                <i class='bx bxs-bell'></i>
+                <span class="text-xs absolute top-0 right-0 bg-red-500 text-white font-semibold rounded-full px-1 text-center">9</span>
+            </div>
+
+                <div x-show="open" @click.away="open=false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg dark:bg-dark-second bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                    <div class="py-1" role="none">
+                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                    <a href="#" class="text-gray-700 dark:text-dark-txt block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Account settings</a>
+                    <a href="#" class="text-gray-700 dark:text-dark-txt block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Support</a>
+                    <a href="#" class="text-gray-700 dark:text-dark-txt block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">License</a>
+                    <form method="POST" action="#" role="none">
+                        <button type="submit" class="text-gray-700 dark:text-dark-txt block w-full text-left px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">
+                        Sign out
+                        </button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+
+        </li>
+        
+    </ul>
+    <!-- END RIGHT NAV -->
+
+</nav>

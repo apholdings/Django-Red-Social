@@ -1,55 +1,46 @@
 {% extends "account/base.html" %}
-{% load static %}
+
 {% load i18n %}
 {% load account socialaccount %}
 
-{% load tailwind_filters %}
-
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Sign in to your account
-    </h2>
-    <p class="mt-2 text-center text-sm text-gray-600">
-      Or
-      <a href="{% url 'account_signup' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
-        Register
-      </a>
-    </p>
-  </div>
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">  
-      <!--FORM-->
-      <form class="space-y-6" action="{% url 'account_login' %}" method="POST">
-        {% csrf_token %}
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Email address
-          </label>
-          <div class="mt-1">
-          {{ form|crispy }}
-          </div>
-          <div class="text-sm">
-            <a href="{% url 'account_reset_password' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
-              Forgot your password?
-            </a>
-          </div>
-        </div>
+<h1>{% trans "Sign In" %}</h1>
 
-        <div>
-          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Sign in
-          </button>
-        </div>
-      </form>
+{% get_providers as socialaccount_providers %}
 
-    </div>
-  </div>
+{% if socialaccount_providers %}
+<p>{% blocktrans with site.name as site_name %}Please sign in with one
+of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+
+<div class="socialaccount_ballot">
+
+  <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </ul>
+
+  <div class="login-or">{% trans 'or' %}</div>
+
 </div>
 
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+<p>{% blocktrans %}If you have not created an account yet, then please
+<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+{% endif %}
+
+<form class="login" method="POST" action="{% url 'account_login' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
+</form>
 
 {% endblock %}

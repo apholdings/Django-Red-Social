@@ -1,0 +1,292 @@
+{% extends 'users/base.html' %}
+
+{% load static %}
+{% load tailwind_tags %}
+{% load tailwind_filters %}
+{% load humanize %}
+
+{% block navbar %}
+{% include 'components/navbar.html' %}
+{% endblock navbar %}
+
+{% block content %}
+
+<main class=' min-h-screen w-full py-5 overflow-x-hidden'>
+    <!--banner img-->
+    <div class="relative bg-gray-800 max-w-full">
+        <div class="absolute inset-0">
+            <img class="w-full h-full object-cover" src="{{profile.banner.url}}" alt="">
+            <div class="absolute inset-0 mix-blend-multiply" aria-hidden="true"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8"></div>
+    </div>
+
+    <!--USER PROFILE-->
+    <div class="md:grid md:gap-6 relative flex space-x-22 pt-4">
+      <div class="mt-5 md:mt-0 ">
+        <div>
+            <!--User info-->
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
+                    <!--profile picture-->
+                    <div class="flex">
+                        <img class=" h-24 w-24 rounded-full ring-4 dark:ring-dark-second ring-white sm:h-32 sm:w-32 hover:bg-gray-100"
+                        src="{{profile.picture.url}}" alt="{{profile.user.username}} Profile Picture">
+                    </div>
+
+                    {% if user.is_authenticated and user != profile.user %}
+                        {% if is_following %}
+                        <form method="POST" action="#" >
+                            {% csrf_token %}
+                            <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
+                            Unfollow
+                            </button>
+                        </form>
+                        {% else %}
+                        <form method="POST" action="#" >
+                            {% csrf_token %}
+                            <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 dark:bg-dark-second bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
+                            Follow
+                            </button>
+                        </form>
+                        {% endif %}
+                    {% endif %}
+
+                    <div x-data="{ open: false }" @keydown.window.escape="open = false" class=" mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+                        <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+                            {% if user.is_authenticated and user == profile.user %}
+                            <a href="#" class="inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
+                                <span>Edit Profile</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                
+                </div>
+
+                <div class=" sm:block  mt-6 min-w-0 flex-1">
+                    <h1 class="text-2xl font-bold dark:text-dark-txt text-gray-900 truncate">
+                    {{profile.user.username}} 
+                        {% if profile.verified == "verified" %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        {% endif %}
+                    </h1>
+                </div>
+
+                {% if profile.bio %}
+                <p class="mt-2 max-w-4xl text-sm dark:text-dark-txt text-gray-500">{{profile.bio}}</p>
+                {% endif %}
+
+                <div class="inline-flex grid-cols-4">
+                <!-- Location -->
+                {% if profile.location %}
+                <p class="mt-2 max-w-4xl text-sm mx-1 text-gray-500 cursor-default">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>{{profile.location}}
+                </p>
+                {% endif %}
+
+                <!--Website-->
+                {% if profile.url %}
+                <p class="mt-2 max-w-4xl text-sm mx-1 dark:text-dark-txt text-gray-500 cursor-default">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg><a class="text-blue-500 hover:text-blue-900" href="{{profile.url}}" target="_blank" rel="nofollow">{{profile.url}}</a>
+                </p>
+                {% endif %}
+
+
+                {% if profile.birthday %}
+                <p class="mt-2 max-w-4xl text-sm mx-1 text-gray-500 cursor-default">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                  </svg>
+                  {{profile.birthday}}
+                </p>
+                {% endif %}
+
+                <!-- Date Joined -->
+                {% if profile.date_created %}
+                <p class="mt-2 max-w-4xl text-sm mx-1 text-gray-500 cursor-default">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>Joined {{profile.date_created}}
+                </p>
+                {% endif %}
+                </div>
+
+
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Tiers-->
+    <!--EndTiers-->
+
+    <div class="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+
+    <div x-data="{
+            openTab: 1,
+            activeClasses:'border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            inactiveClasses:'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            underlineActive: 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            underlineInactive: 'bg-transparent absolute inset-x-0 bottom-0 h-0.5'
+        }">
+        <div class="">
+            <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <!-- Current: "border-blue-500 text-blue-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" -->
+                <button @click="openTab = 1"
+                        :class="openTab === 1 ? activeClasses : inactiveClasses"
+                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                My Account
+                <span aria-hidden="true" :class="openTab === 1 ? underlineActive : underlineInactive"></span>
+                </button>
+
+                <button @click="openTab = 2"
+                        :class="openTab === 2 ? activeClasses : inactiveClasses"
+                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Company
+                <span aria-hidden="true" :class="openTab === 2 ? underlineActive : underlineInactive"></span>
+                </button>
+
+                <button @click="openTab = 3"
+                        :class="openTab === 3 ? activeClasses : inactiveClasses"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Team Members
+                <span aria-hidden="true" :class="openTab === 3 ? underlineActive : underlineInactive"></span>
+                </button>
+
+                <button @click="openTab = 4"
+                        :class="openTab === 4 ? activeClasses : inactiveClasses"
+                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                Billing
+                <span aria-hidden="true" :class="openTab === 4 ? underlineActive : underlineInactive"></span>
+                </button>
+            </nav>
+            </div>
+        </div>
+
+
+
+        <div x-show="openTab === 1">
+        <!-- This example requires Tailwind CSS v2.0+ -->
+<div>
+
+  <div class="mt-5 border-t border-gray-200">
+    <dl class="sm:divide-y sm:divide-gray-200">
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          Full name
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          {{profile.user.first_name}} {{profile.user.last_name}}
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          Application for
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          Backend Developer
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          Email address
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          {{profile.user.email}}
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          Salary expectation
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          $120,000
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          About
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.
+        </dd>
+      </div>
+      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+        <dt class="text-sm font-medium text-gray-500">
+          Attachments
+        </dt>
+        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+          <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
+            <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+              <div class="w-0 flex-1 flex items-center">
+                <!-- Heroicon name: solid/paper-clip -->
+                <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                </svg>
+                <span class="ml-2 flex-1 w-0 truncate">
+                  resume_back_end_developer.pdf
+                </span>
+              </div>
+              <div class="ml-4 flex-shrink-0">
+                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                  Download
+                </a>
+              </div>
+            </li>
+            <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+              <div class="w-0 flex-1 flex items-center">
+                <!-- Heroicon name: solid/paper-clip -->
+                <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
+                </svg>
+                <span class="ml-2 flex-1 w-0 truncate">
+                  coverletter_back_end_developer.pdf
+                </span>
+              </div>
+              <div class="ml-4 flex-shrink-0">
+                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                  Download
+                </a>
+              </div>
+            </li>
+          </ul>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+        </div>
+
+        <div x-show="openTab === 2">
+        Tes2
+        </div>
+
+        <div x-show="openTab === 3">
+        Tes3
+        </div>
+
+        <div x-show="openTab === 4">
+        Test4
+        </div>
+
+
+    </div>
+
+
+    </div>
+
+</main>
+
+{% endblock content %}

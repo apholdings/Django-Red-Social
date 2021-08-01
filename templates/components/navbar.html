@@ -11,13 +11,25 @@
         </a>
 
         <div class="flex items-center justify-between space-x-1">
+            {% if not user.is_authenticated %}
+        
+            <a href="{% url 'account_login' %}" class="inline-flex items-center md:hidden justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
+                
+                <span class="mx-2 font-semibold dark:text-dark-txt">Login</span>
+            </a>
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center md:hidden justify-center p-1 rounded-full hover:text-white  hover:bg-blue-600 dark:hover:bg-dark-third mx-1">
+                
+                <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
+            </a>
+        
+            {% else %}
 
             <a href="#" class="inline-flex md:hidden items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
                 <i class='bx bx-coin text-yellow-400'></i>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="mx-2 font-semibold dark:text-dark-txt">0.00</span>
+                <span class="mx-2 font-semibold dark:text-dark-txt">{{user.profile.coins}}</span>
             </a>
 
             <div class="relative bg-gray-100 dark:bg-dark-third px-2 py-2 w-10 h-10 sm:w-11 sm:h-11 lg:h-10 lg:w-10 xl:w-max xl:pl-3 xl:pr-8 rounded-full flex items-center justify-center cursor-pointer">
@@ -28,6 +40,7 @@
             <div class="text-xl grid place-items-center md:hidden bg-gray-200 dark:bg-dark-third rounded-full w-10 h-10 cursor-pointer hover:bg-gray-300 dark:text-dark-txt" id="dark-mode-toggle-mb">
                 <i class='bx bxs-bell'></i>
             </div>
+            {% endif %}
         </div>
     </div>
     <!-- END LEFT NAV -->
@@ -117,13 +130,26 @@
 
     <!-- RIGHT NAV -->
     <ul class="hidden md:flex mx-4 items-center justify-center">
+        {% if not user.is_authenticated %}
+        
+            <a href="{% url 'account_login' %}" class="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
+                
+                <span class="mx-2 font-semibold dark:text-dark-txt">Login</span>
+            </a>
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center p-1 rounded-full hover:text-white  hover:bg-blue-600 dark:hover:bg-dark-third mx-1">
+                
+                <span class="mx-2 font-semibold dark:text-dark-txt">Register</span>
+            </a>
+        
+        {% else %}
+
         <li class="h-full xl:flex">
             <a href="#" class="inline-flex items-center justify-center p-1 rounded-full hover:bg-gray-200 dark:hover:bg-dark-third mx-1">
                 <i class='bx bx-coin text-yellow-400'></i>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="mx-2 font-semibold dark:text-dark-txt">0.00</span>
+                <span class="mx-2 font-semibold dark:text-dark-txt">{{user.profile.coins}}</span>
             </a>
         </li>
 
@@ -150,7 +176,7 @@
             </div>
 
         </li>
-        
+        {% endif %}
     </ul>
     <!-- END RIGHT NAV -->
 

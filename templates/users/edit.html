@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load tailwind_filters %}
+
+{% block title %}{{user.username}} Edit Profile{% endblock title %}
+
+{% block navbar %}
+{% include 'components/navbar.html' %}
+{% endblock navbar %}
+
+{% block left_sidebar %}
+{% comment %} {% include 'components/sidebars/left/users/sidebar.html' %} {% endcomment %}
+{% endblock left_sidebar %}
+
+{% block content %}
+<form class="form-horizontal dark:text-dark-txt" method="post"  enctype="multipart/form-data">
+{% csrf_token %}
+<div class="mt-1 sm:mt-0 sm:col-span-2">
+      <img class="h-28 w-full bg-cover" src="{{user.profile.banner.url}}" alt="{{profile.user.username}} Banner Picture">
+
+      <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 dark:border-dark-third border-gray-300 border-dashed rounded-md">
+        {{form.banner}}
+        <div class="space-y-1 text-center">
+          <div class="flex text-sm text-gray-600">
+            
+          </div>
+        </div>
+      </div>
+
+      <!--Profile Picture-->
+        <div class="mt-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t dark:border-dark-third  border-gray-200 sm:pt-5">
+        <label for="photo" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+            Photo
+        </label>
+        <div class="mt-1 sm:mt-0 sm:col-span-2">
+            <div class="flex items-center">
+            <span class="mr-4 h-18 w-18 rounded-full overflow-hidden dark:bg-dark-third bg-gray-100">
+                <img src="{{user.profile.picture.url}}" alt="">
+            </span>
+            {{form.picture}}
+            </div>
+        </div>
+        </div>
+
+        <div class="mt-4">
+        <label for="first name" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        First Name
+        </label>
+        {{form.first_name}}
+        </div>
+        <label for="last name" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+            Last Name
+        </label>
+        {{form.last_name}}
+
+        <label for="bio" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+            Bio
+        </label>
+        {{form.bio}}
+
+        <label for="city" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        Location: City, Country
+        </label>
+        {{form.location}}
+
+        <label for="birthday" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        Date of Birth: yyyy-mm-dd
+        </label>
+        {{form.birthday}}
+
+        <label for="url" class="block text-sm font-medium dark:text-dark-txt text-gray-700">
+        Website URL
+        </label>
+        {{form.url}}
+        </div>
+
+         <div class="control-group">
+            <div class="controls">
+            <a href="{% url 'users:profile' username=user.username %}" class="mt-4 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded dark:text-dark-txt text-indigo-700 dark:bg-dark-second bg-indigo-100 dark:hover:bg-dark-third hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-third focus:ring-indigo-500">
+            Return to Profile </a>
+            <button type="submit" class="mt-4 inline-flex float-right items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded dark:text-dark-txt text-indigo-700 dark:bg-dark-third bg-indigo-100 dark:hover:bg-dark-third hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-third focus:ring-indigo-500">
+            Update</button>
+            </div>
+        </div>
+
+    </div>
+</form>
+{% endblock content %}

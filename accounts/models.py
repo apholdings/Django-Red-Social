@@ -45,6 +45,8 @@ class Profile(models.Model):
 
     coins = models.DecimalField(max_digits=19, decimal_places=2, default=0, blank=False)
 
+    followers = models.ManyToManyField(User, blank=True, related_name="followers")
+
     date_created = models.DateField(auto_now_add=True)
 
     #User info

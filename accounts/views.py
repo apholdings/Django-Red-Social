@@ -5,28 +5,41 @@ from accounts.models import Profile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 User = get_user_model()
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.template import loader
+from django.contrib import messages
+from django.http import HttpResponse
 
-class UserProfileView(View):
-    def get(self, request, username,*args, **kwargs):
-        user = get_object_or_404(User, username=username)
-        profile = Profile.objects.get(user=user)
 
-        context={
-            'user':user,
-            'profile':profile
-        }
-        return render(request, 'users/detail.html', context)
+@login_required
+def UserProfileView(request, username):
+	user = get_object_or_404(User, username=username)
+	profile = Profile.objects.get(user=user)
 
-    # def post(self, request, username,*args, **kwargs):
-    #     user = get_object_or_404(User, username=username)
-    #     profile = Profile.objects.get(user=user)
+	followers = profile.followers.all()
 
-    #     context={
-    #         'user':user,
-    #         'profile':profile
-    #     }
+	if len(followers) == 0:
+            is_following = False
+		
+	for follower in followers:
+		if follower == request.user:
+			is_following = True
+			break
+		else:
+			is_following = False
 
-    #     return render(request, 'users/detail.html', context)
+	number_of_followers = len(followers)
+
+
+	template = loader.get_template('users/detail.html')
+
+	context = {
+		'profile':profile,
+		'number_of_followers':number_of_followers,
+		'is_following': is_following,
+	}
+
+	return HttpResponse(template.render(context, request))
 
 
 @login_required
@@ -59,3 +72,40 @@ def EditProfile(request):
     }
 
     return render(request, 'users/edit.html', context)
+
+
+class AddFollower(LoginRequiredMixin, View):
+	def post(self, request, pk, *args, **kwargs):
+		profile = Profile.objects.get(pk=pk)
+		profile.followers.add(request.user)
+		messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'User Followed'
+        )
+		return redirect('users:profile', username=request.user.username)
+
+
+class RemoveFollower(LoginRequiredMixin, View):
+	def post(self, request, pk, *args, **kwargs):
+		profile = Profile.objects.get(pk=pk)
+		profile.followers.remove(request.user)
+		messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            'User Unfollowed'
+        )
+		return redirect('users:profile', username=request.user.username)
+
+
+class ListFollowers(View):
+    def get(self, request, pk, *args, **kwargs):
+        profile = Profile.objects.get(pk=pk)
+        followers = profile.followers.all()
+
+        context = {
+            'profile': profile,
+            'followers': followers
+        }
+
+        return render(request, 'pages/social/followers_list.html', context)

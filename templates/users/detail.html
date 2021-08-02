@@ -36,14 +36,14 @@
 
                     {% if user.is_authenticated and user != profile.user %}
                         {% if is_following %}
-                        <form method="POST" action="#" >
+                        <form method="POST" action="{% url 'users:remove-follower' profile.pk %}" >
                             {% csrf_token %}
                             <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
                             Unfollow
                             </button>
                         </form>
                         {% else %}
-                        <form method="POST" action="#" >
+                        <form method="POST" action="{% url 'users:add-follower' profile.pk %}" >
                             {% csrf_token %}
                             <button type="submit" class="float-right inline-flex justify-center px-4 py-2 border dark:bg-dark-main dark:border-dark-third dark:hover:bg-dark-third dark:text-dark-txt border-blue-500 shadow-sm text-md font-bold rounded-full text-blue-500 dark:bg-dark-second bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-dark-second focus:ring-blue-500">
                             Follow

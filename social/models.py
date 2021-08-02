@@ -13,6 +13,9 @@ def user_directory_path(instance, filename):
 
 
 class SocialPost(models.Model):
+    shared_body = models.TextField(blank=True, null=True)
+    shared_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='+')
+    shared_on = models.DateTimeField(blank=True, null=True)
     body=models.TextField()
     image = models.ManyToManyField('Image', blank=True)
     created_on = models.DateTimeField(default=timezone.now)

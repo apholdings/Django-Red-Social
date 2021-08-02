@@ -20,3 +20,18 @@ class SocialPostForm(forms.ModelForm):
     class Meta:
         model=SocialPost
         fields=['body']
+
+
+class SocialCommentForm(forms.ModelForm):
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-dark-third dark:border-dark-third dark:text-dark-txt flex max-w-full sm:text-sm border-gray-300 rounded-md',
+            'rows': '1',
+            'placeholder': 'Comment Something...'
+            }),
+        required=True
+        )
+
+    class Meta:
+        model=SocialComment
+        fields=['comment']

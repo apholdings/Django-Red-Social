@@ -110,9 +110,26 @@
                     <span class="text-sm text-gray-500">{{post.created_on|naturaltime}}</span>
                 </div>
             </div>
-            <div class="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
-                <i class='bx bx-dots-horizontal-rounded'></i>
+            
+            {% if post.author %}
+            <div x-data="{open:false}" class="relative inline-block text-left">
+                <div>
+                    <div @click="open=true" class="w-8 h-8 grid place-items-center text-xl text-gray-500 hover:bg-gray-200 dark:text-dark-txt dark:hover:bg-dark-third rounded-full cursor-pointer">
+                        <i class='bx bx-dots-horizontal-rounded'></i>
+                    </div>
+                </div>
+                <div x-show="open" @click.away="open=false" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                    <div class="py-1" role="none">
+                    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+                    <a href="{% url 'social:post-edit' post.pk %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Edit</a>
+                    <a href="{% url 'social:post-delete' post.pk %}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Delete</a>
+                    
+                    </div>
+                </div>
             </div>
+            {% endif %}
+            
+
         </div>
         <!-- END POST AUTHOR -->
 
@@ -126,7 +143,7 @@
         {% if post.image.count == 1 %}
         <div class="py-2">
                 {% for img in post.image.all %}
-                <a href="#">
+                <a href="{% url 'social:post-detail' post.pk %}">
                 <img src="{{img.image.url}}" alt="Post image">
                 </a>
                 {% endfor %}
@@ -137,7 +154,7 @@
         <div class="py-2">
             <div class="grid grid-cols-3 gap-1">
             {% for img in post.image.all %}
-            <a href="#">
+            <a href="{% url 'social:post-detail' post.pk %}">
             <img src="{{img.image.url}}" alt="Post image">
             </a>
             {% endfor %}

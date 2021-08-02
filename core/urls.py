@@ -10,6 +10,8 @@ urlpatterns = [
 
     path('users/', include('accounts.urls', namespace='users')),
 
+    path('social/', include('social.urls', namespace='social')),
+
     path('', HomeView.as_view(), name="home")
 ]
 
